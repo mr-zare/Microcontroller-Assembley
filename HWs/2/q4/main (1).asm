@@ -1,0 +1,38 @@
+;
+; code.asm
+;
+; Created: 12/8/2023 8:55:32 PM
+; Author :erfan zare
+;
+
+.include "M32DEF.INC"
+.ORG 0
+; .DEF x = R22 
+
+		LDI R21, HIGH(RAMEND)
+		OUT SPH, R21
+		LDI R21, LOW(RAMEND)
+		OUT SPL, R21
+
+		LDI R22, 0b11001010 
+
+		LDI R21, 0xFF
+		OUT DDRD, R21
+
+		LDI R21, 0x0
+		OUT DDRA, R21
+		OUT DDRB, R21
+
+AGAIN:
+		IN R21, PINA 
+		SUB R21, R22 
+		BREQ OPER
+		RJMP AGAIN
+
+OPER:
+		IN R21, PINA
+		IN R23, PINB
+		ADD R21, R23
+		OUT PORTD, R21
+		INC R22
+		RJMP AGAIN
